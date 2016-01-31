@@ -185,30 +185,24 @@ angular.module('conFusion.controllers', [])
 
 // implement the IndexController and About Controller here
 
-.controller('IndexController', ['$scope', 'menuFactory', 'corporateFactory', function ($scope, menuFactory, corporateFactory) {
+.controller('IndexController', ['$scope', 'menuFactory', 'corporateFactory', 'baseURL', function($scope, menuFactory, corporateFactory, baseURL) {
 
-    $scope.leader = corporateFactory.get({
-        id: 3
-    });
-    $scope.showDish = false;
-    $scope.message = "Loading ...";
-    $scope.dish = menuFactory.getDishes().get({
-            id: 0
-        })
-        .$promise.then(
-            function (response) {
-                $scope.dish = response;
-                $scope.showDish = true;
-            },
-            function (response) {
-                $scope.message = "Error: " + response.status + " " + response.statusText;
-            }
-        );
-    $scope.promotion = menuFactory.getPromotion().get({
-        id: 0
-    });
-
-                    }])
+                        $scope.baseURL = baseURL;
+                        $scope.leader = corporateFactory.get({id:3});
+                        $scope.showDish = false;
+                        $scope.message="Loading ...";
+                        $scope.dish = menuFactory.getDishes().get({id:0})
+                        .$promise.then(
+                            function(response){
+                                $scope.dish = response;
+                                $scope.showDish = true;
+                            },
+                            function(response) {
+                                $scope.message = "Error: "+response.status + " " + response.statusText;
+                            }
+                        );
+                        $scope.promotion = menuFactory.getPromotion().get({id:0});
+      }])
 
 .controller('AboutController', ['$scope', 'corporateFactory', function ($scope, corporateFactory) {
 

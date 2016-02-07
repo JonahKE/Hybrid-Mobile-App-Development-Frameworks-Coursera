@@ -204,6 +204,13 @@ angular.module('conFusion.controllers', [])
         $scope.popover.remove();
     });
 
+
+    $scope.addToFavorites = function() {
+        console.log("index is " + $scope.dish.id);
+        favoriteFactory.addToFavorites($scope.dish.id);
+        $scope.closePopover();
+    };
+
         }])
 
 .controller('DishCommentController', ['$scope', 'menuFactory', function ($scope, menuFactory) {

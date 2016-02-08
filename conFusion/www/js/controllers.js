@@ -166,7 +166,7 @@ angular.module('conFusion.controllers', [])
     };
         }])
 
-.controller('DishDetailController', ['$scope', '$stateParams', 'menuFactory', 'favoriteFactory', 'baseURL', '$ionicPopover', function ($scope, $stateParams, menuFactory, favoriteFactory, baseURL, $ionicPopover) {
+.controller('DishDetailController', ['$scope', '$stateParams', 'menuFactory', 'favoriteFactory', 'baseURL', '$ionicPopover', '$ionicModal', function ($scope, $stateParams, menuFactory, favoriteFactory, baseURL, $ionicPopover, $ionicModal) {
 
     $scope.baseURL = baseURL;
     $scope.dish = {};
@@ -211,7 +211,52 @@ angular.module('conFusion.controllers', [])
         $scope.closePopover();
     };
 
-        }])
+    $scope.commentData = {};
+
+    $ionicModal.fromTemplateUrl('templates/dish-comment.html', {
+        scope: $scope,
+        animation: 'slide-in-up'
+    }).then(function(modal) {
+        $scope.dishCommentModal = modal;
+    });
+
+    $scope.openDishCommentModal = function() {
+        $scope.dishCommentModal.show();
+    }
+
+    $scope.closeDishCommentModal = function() {
+        $scope.dishCommentModal.hide();
+    }
+
+    $scope.$on('$destroy', function() {
+        $scope.dishCommentModal.remove();
+    });
+
+    $scope.addComment = function() {
+        $scope.openDishCommentModal();
+        $scope.closePopover();
+    }
+
+    $scope.submitComment = function() {
+        $scope.commentData.date = new Date().toISOString();
+        console.log($scope.commentData);
+
+        $scope.dish.comments.push($scope.commentData);
+        menuFactory.getDishes().update({
+            id: $scope.dish.id
+        }, $scope.dish);
+
+        $scope.commentData = {
+            rating: 5,
+            comment: "",
+            author: "",
+            date: ""
+        };
+
+        $scope.closeDishCommentModal();
+    };
+
+}])
 
 .controller('DishCommentController', ['$scope', 'menuFactory', function ($scope, menuFactory) {
 
